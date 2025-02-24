@@ -4,6 +4,7 @@ require "json"
 class GamesController < ApplicationController
   def new
     @letters = ("A".."Z").to_a.sample(10)
+    session[:score] ||= 0
   end
 
   def score
@@ -20,11 +21,12 @@ class GamesController < ApplicationController
 
       if data["found"]
         @result = "Congratulations! #{@word} is a valid English word!"
+        session[:score] += @word.size
       else
         @result = "Sorry but #{@word} does not seem to be a valid English word..."
       end
     else
-      @result = "Sorry but #{@word} can't be built out of #{letters.join(", ")}"
+      @result = "Sorry but #{@word} can't be built out of #{letters.join(", ")}."
     end
   end
 end
